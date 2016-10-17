@@ -22,15 +22,17 @@ function preload() {
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.add.sprite(0, 0, 'sky');
-    scoreText=game.add.text(16,16,'score:0',{fontSize:'32px',fill: '#000'});
+    scoreText=game.add.text(525,16,'score:0',{fontSize:'32px',fill: '#000'});
     platforms = game.add.group();
     platforms.enableBody = true;
     var ground = platforms.create(0, game.world.height-10, 'ground');
     ground.scale.setTo(2, 2);
     ground.body.immovable = true;
-    var ledge = platforms.create(275, 300, 'ground');
+    var ledge; 
+    ledge= platforms.create(0, 300, 'ground');
     ledge=platforms.create(0,100,'ground');
     ledge.body.immovable=true;
+    ledge=platforms.create(600,250,'ground');
     player = game.add.sprite(32, game.world.height - 70, 'dude');
     game.physics.arcade.enable(player);
     player.body.bounce.y = 0;
@@ -41,16 +43,13 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
     stars=game.add.group();
     stars.enableBody=true;
-    for (var i=0; i<13; i++)
-    {
+
         var star=stars.create(70,10,'star');
         star.body.gravity.y=6;
-        stars.body.bounce.y=0.7+Math.random()*0.2;
-        
-    }
-    platforms.body.gravity.x=200;
+        star=stars.create(0,250,'star');
+        star.body.gravity.y=6;
+        stars.body.bounce.y=0.7;
 }
-
 function update() {
     var hitPlatform = game.physics.arcade.collide(player, platforms);
     game.physics.arcade.overlap(player,stars,collectStar,null,this);
@@ -98,4 +97,7 @@ function collectStar (player,star){
     star.kill();
     score+=1;
     scoreText.text='Score:'+score;
+    if (score>=2){
+        scoreText.text='Good Job, you win'
+    }
 }
